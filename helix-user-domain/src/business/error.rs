@@ -4,7 +4,7 @@ use thiserror::Error;
 
 //Define the possible errors
 #[derive(Error, Debug)]
-pub enum EntryDomainError {
+pub enum UserDomainError {
     #[error("NotImplemented")]
     NotImplemented,
     #[error("Storage Error")]
@@ -19,4 +19,4 @@ pub enum EntryDomainError {
 }
 
 //Define a generic error type to simplify return.
-pub type EntryDomainResult<T> = Result<T, EntryDomainError>;
+pub type UserDomainResult<T> = Result<T, UserDomainError>;

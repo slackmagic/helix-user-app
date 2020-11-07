@@ -17,3 +17,10 @@ serde = "1.0"
 serde_derive = "1.0"
 serde_json = "1.0"
 json = "*"
+
+##DATA UTILS => UTC Date, UUID generation
+uuid = { version = "0.8.1", features = ["v5", "serde"]}
+chrono = { version = "^0.4", features = ["serde"] }
+
+##Password hashing
+rust-crypto = "^0.2"

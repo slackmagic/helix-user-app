@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate serde_derive;
+
 pub mod configuration;
 pub mod controller;
 pub mod state;
@@ -61,16 +64,36 @@ fn get_routes_configuration(cfg: &mut web::ServiceConfig) {
     //----------------------------------------------------------
     //___DOMAIN___
     //----------------------------------------------------------
-    //TODO: Adapt example.
+    //----------------------------------------------------------
+    //___USERSTORE___
+    //----------------------------------------------------------
     cfg.service(
-        web::scope("/APP_NAME")
-            .route("", web::get().to(unimplemented))
-            .route("", web::post().to(unimplemented))
-            .route("", web::put().to(unimplemented))
+        web::scope("")
+            .route("/login", web::post().to(login))
+            .route("/login", web::put().to(refresh_token))
             .service(
-                web::scope("/{uuid}")
-                    .route("", web::get().to(unimplemented))
-                    .route("", web::delete().to(unimplemented)),
+                web::scope("/persons")
+                    .route("", web::get().to(get_all_persons))
+                    .route("", web::post().to(create_person))
+                    .route("", web::put().to(update_person))
+                    //.route("", web::delete().to(delete_person))
+                    .service(
+                        web::scope("/{uuid}")
+                            .route("", web::get().to(get_person))
+                            .route("", web::delete().to(delete_person)),
+                    ),
+            )
+            .service(
+                web::scope("/users")
+                    .route("", web::get().to(get_all_users))
+                    .route("", web::post().to(create_user))
+                    .route("", web::put().to(update_user))
+                    //.route("", web::delete().to(delete_user))
+                    .service(
+                        web::scope("/{uuid}")
+                            .route("", web::get().to(get_user))
+                            .route("", web::delete().to(delete_user)),
+                    ),
             ),
     );
 }
