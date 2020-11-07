@@ -1,0 +1,13 @@
+[workspace]
+members = [
+    "bin/helix-user-api",
+    "helix-user-domain",
+]
+
+##DEFAULT RUNNING BIN
+default-members=["bin/helix-user-api"]
+
+
+##__FIX FOR ARM COMPILATION SINCE RUST 1.38
+[profile.release]
+codegen-units = 1

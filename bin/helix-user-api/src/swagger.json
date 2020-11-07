@@ -1,0 +1,13 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "HELIX-[TEMPLATE-APP]-API",
+        "version": "1.0"
+    },
+    "host": "api.server.test",
+    "basePath": "/api",
+    "schemes": [
+        "https"
+    ],
+    "paths": {}
+}

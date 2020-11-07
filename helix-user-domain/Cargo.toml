@@ -1,0 +1,19 @@
+[package]
+name = "helix-user-domain"
+version = "0.1.0"
+authors = ["SlackMagiC <laurent.pietrzyk@gmail.com>"]
+edition = "2018"
+
+
+[lib]
+name="helix_user_domain"
+
+[dependencies]
+## Error management
+thiserror = "1.0"
+
+##SERIALIZATION TO JSON
+serde = "1.0"
+serde_derive = "1.0"
+serde_json = "1.0"
+json = "*"
