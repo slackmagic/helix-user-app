@@ -2,14 +2,18 @@ use crate::business::error::*;
 use crate::business::traits::UserDomainTrait;
 use crate::core::app_user::AppUser;
 use crate::core::person::Person;
+use crate::storage::traits::StorageTrait;
 use crypto::digest::Digest;
 use crypto::sha2::Sha256;
+use std::boxed::Box;
 
-pub struct UserDomain {}
+pub struct UserDomain {
+    storage: Box<dyn StorageTrait>,
+}
 
 impl UserDomain {
-    pub fn new() -> Self {
-        UserDomain {}
+    pub fn new(storage: Box<dyn StorageTrait>) -> Self {
+        UserDomain { storage: storage }
     }
 }
 
@@ -36,7 +40,18 @@ impl UserDomainTrait for UserDomain {
         key
     }
     fn login(&self, login: &String, password: &String) -> UserDomainResult<AppUser> {
-        Err(UserDomainError::NotImplemented)
+        match self
+            .storage
+            .login(self.generate_user_auth_key(login, password))
+        {
+            Ok(wrap_user) => match wrap_user {
+                Some(user) => Ok(user),
+                //User not found
+                None => Err(UserDomainError::NotImplemented),
+            },
+            //Error with backend
+            Err(_) => Err(UserDomainError::NotImplemented),
+        }
     }
 
     fn get_all_users<'a>(&self) -> UserDomainResult<Vec<AppUser>> {

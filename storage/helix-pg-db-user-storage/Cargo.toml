@@ -1,0 +1,18 @@
+[package]
+name = "helix-pg-db-user-storage"
+version = "0.1.0"
+authors = ["SlackMagiC <laurent.pietrzyk@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "helix_pg_db_user_storage"
+
+[dependencies]
+helix-user-domain = { path = "../../helix-user-domain" }
+helix-db-lib = {git = "https://github.com/slackmagic/helix-shared-lib", branch = "master"}
+
+##DATA UTILS => UTC Date, UUID generation
+uuid = { version = "0.5", features = ["v5", "serde"]}
+chrono = { version = "^0.4", features = ["serde"] }
+postgres = {version = "^0.15.2", features =["with-chrono", "with-uuid", "with-serde_json"]}

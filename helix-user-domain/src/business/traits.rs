@@ -2,7 +2,7 @@ use crate::business::error::*;
 use crate::core::app_user::AppUser;
 use crate::core::person::Person;
 
-pub trait UserDomainTrait: Sync + Send {
+pub trait UserDomainTrait: Send {
     fn generate_user_auth_key(&self, login: &String, password: &String) -> String;
 
     fn login(&self, login: &String, password: &String) -> UserDomainResult<AppUser>;

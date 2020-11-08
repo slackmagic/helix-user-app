@@ -15,7 +15,7 @@ use helix_config_lib::Configuration as GlobalConfiguration;
 use std::sync::{Arc, Mutex};
 use std::{env, io};
 
-const APP_NAME: &str = "HELIX_USER_APP";
+const APP_NAME: &str = "USER_APP";
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
