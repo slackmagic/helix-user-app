@@ -2,6 +2,7 @@
 members = [
     "bin/helix-user-api",
     "helix-user-domain",
+    "storage/helix-db-pg-user-storage"
 ]
 
 ##DEFAULT RUNNING BIN

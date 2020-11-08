@@ -1,0 +1,11 @@
+[package]
+name = "helix-db-pg-user-storage"
+version = "0.1.0"
+authors = ["SlackMagiC <laurent.pietrzyk@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "helix_db_pg_user_storage"
+
+[dependencies]
