@@ -15,7 +15,7 @@ use helix_config_lib::Configuration as GlobalConfiguration;
 use std::sync::{Arc, Mutex};
 use std::{env, io};
 
-const APP_NAME: &str = "HELIX_API_TEMPLATE";
+const APP_NAME: &str = "HELIX_USER_APP";
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
@@ -70,7 +70,6 @@ fn get_routes_configuration(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("")
             .route("/login", web::post().to(login))
-            .route("/login", web::put().to(refresh_token))
             .service(
                 web::scope("/persons")
                     .route("", web::get().to(get_all_persons))

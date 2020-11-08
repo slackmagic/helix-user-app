@@ -35,7 +35,7 @@ impl UserDomainTrait for UserDomain {
         //return
         key
     }
-    fn login(&self, login: &String, password: &String) -> UserDomainResult<Option<AppUser>> {
+    fn login(&self, login: &String, password: &String) -> UserDomainResult<AppUser> {
         Err(UserDomainError::NotImplemented)
     }
 

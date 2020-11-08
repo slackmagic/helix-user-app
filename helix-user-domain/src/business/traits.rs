@@ -5,7 +5,7 @@ use crate::core::person::Person;
 pub trait UserDomainTrait: Sync + Send {
     fn generate_user_auth_key(&self, login: &String, password: &String) -> String;
 
-    fn login(&self, login: &String, password: &String) -> UserDomainResult<Option<AppUser>>;
+    fn login(&self, login: &String, password: &String) -> UserDomainResult<AppUser>;
 
     fn get_all_users<'a>(&self) -> UserDomainResult<Vec<AppUser>>;
     fn get_user<'a>(&self, uuid: Option<uuid::Uuid>) -> UserDomainResult<Option<AppUser>>;
