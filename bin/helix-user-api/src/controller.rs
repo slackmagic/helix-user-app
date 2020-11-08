@@ -45,9 +45,12 @@ struct RefreshToken {
     refresh_token: String,
 }
 
-pub fn login(state: web::Data<Mutex<AppState>>, login_data: web::Json<LoginData>) -> HttpResponse {
-    let locked_state = &mut *state.lock().unwrap();
-    let domain = locked_state.get_domain();
+pub fn login(
+    wrap_state: Data<Arc<Mutex<AppState>>>,
+    login_data: web::Json<LoginData>,
+) -> HttpResponse {
+    let state = wrap_state.lock().unwrap();
+    let domain = state.get_domain();
 
     match domain.login(&login_data.login, &login_data.password) {
         Ok(app_user) => {
@@ -70,24 +73,22 @@ pub fn login(state: web::Data<Mutex<AppState>>, login_data: web::Json<LoginData>
             }
         }
 
-        Err(_) => HttpResponse::Unauthorized()
-            .content_type("text/html; charset=utf-8")
-            .body("{'message':'invalid credentials'}"),
+        Err(_) => HttpResponse::Unauthorized().body("{'message':'invalid credentials'}"),
     }
 }
 
-pub fn get_all_persons(state: web::Data<Mutex<AppState>>, _req: HttpRequest) -> HttpResponse {
-    let locked_state = &mut *state.lock().unwrap();
-    let domain = locked_state.get_domain();
+pub fn get_all_persons(wrap_state: Data<Arc<Mutex<AppState>>>, _req: HttpRequest) -> HttpResponse {
+    let state = wrap_state.lock().unwrap();
+    let domain = state.get_domain();
     match domain.get_all_persons() {
         Err(_) => HttpResponse::InternalServerError().body("Internal Server Error."),
         Ok(persons) => HttpResponse::Ok().json(persons),
     }
 }
 
-pub fn get_person(state: web::Data<Mutex<AppState>>, req: HttpRequest) -> HttpResponse {
-    let locked_state = &mut *state.lock().unwrap();
-    let domain = locked_state.get_domain();
+pub fn get_person(wrap_state: Data<Arc<Mutex<AppState>>>, req: HttpRequest) -> HttpResponse {
+    let state = wrap_state.lock().unwrap();
+    let domain = state.get_domain();
 
     let uuid: uuid::Uuid = uuid::Uuid::parse_str(req.match_info().get("uuid").unwrap()).unwrap();
 
@@ -100,9 +101,12 @@ pub fn get_person(state: web::Data<Mutex<AppState>>, req: HttpRequest) -> HttpRe
     }
 }
 
-pub fn create_person(state: web::Data<Mutex<AppState>>, json: web::Json<Person>) -> HttpResponse {
-    let locked_state = &mut *state.lock().unwrap();
-    let domain = locked_state.get_domain();
+pub fn create_person(
+    wrap_state: Data<Arc<Mutex<AppState>>>,
+    json: web::Json<Person>,
+) -> HttpResponse {
+    let state = wrap_state.lock().unwrap();
+    let domain = state.get_domain();
 
     let person: Person = json.into_inner();
     match domain.create_person(person) {
@@ -111,9 +115,12 @@ pub fn create_person(state: web::Data<Mutex<AppState>>, json: web::Json<Person>)
     }
 }
 
-pub fn update_person(state: web::Data<Mutex<AppState>>, json: web::Json<Person>) -> HttpResponse {
-    let locked_state = &mut *state.lock().unwrap();
-    let domain = locked_state.get_domain();
+pub fn update_person(
+    wrap_state: Data<Arc<Mutex<AppState>>>,
+    json: web::Json<Person>,
+) -> HttpResponse {
+    let state = wrap_state.lock().unwrap();
+    let domain = state.get_domain();
 
     let person: Person = json.into_inner();
     match domain.update_person(person) {
@@ -122,22 +129,24 @@ pub fn update_person(state: web::Data<Mutex<AppState>>, json: web::Json<Person>)
     }
 }
 
-pub fn delete_person(state: web::Data<Mutex<AppState>>, json: web::Json<Person>) -> HttpResponse {
-    let locked_state = &mut *state.lock().unwrap();
-    let domain = locked_state.get_domain();
+pub fn delete_person(
+    wrap_state: Data<Arc<Mutex<AppState>>>,
+    json: web::Json<Person>,
+) -> HttpResponse {
+    let state = wrap_state.lock().unwrap();
+    let domain = state.get_domain();
 
     let person: Person = json.into_inner();
-    domain.delete_person(&person);
 
-    match domain.delete_person(&person) {
+    match domain.delete_person(person) {
         Err(_) => HttpResponse::InternalServerError().body("Internal Server Error."),
         Ok(_) => HttpResponse::NoContent().body("Person deleted."),
     }
 }
 
-pub fn get_all_users(state: web::Data<Mutex<AppState>>, _req: HttpRequest) -> HttpResponse {
-    let locked_state = &mut *state.lock().unwrap();
-    let domain = locked_state.get_domain();
+pub fn get_all_users(wrap_state: Data<Arc<Mutex<AppState>>>, _req: HttpRequest) -> HttpResponse {
+    let state = wrap_state.lock().unwrap();
+    let domain = state.get_domain();
 
     match domain.get_all_users() {
         Err(_) => HttpResponse::InternalServerError().body("Internal Server Error."),
@@ -145,14 +154,14 @@ pub fn get_all_users(state: web::Data<Mutex<AppState>>, _req: HttpRequest) -> Ht
     }
 }
 
-pub fn get_user(state: web::Data<Mutex<AppState>>, req: HttpRequest) -> HttpResponse {
-    let locked_state = &mut *state.lock().unwrap();
-    let domain = locked_state.get_domain();
+pub fn get_user(wrap_state: Data<Arc<Mutex<AppState>>>, req: HttpRequest) -> HttpResponse {
+    let state = wrap_state.lock().unwrap();
+    let domain = state.get_domain();
 
     //TODO: Control parse
     let uuid: uuid::Uuid = uuid::Uuid::parse_str(req.match_info().get("uuid").unwrap()).unwrap();
 
-    match domain.get_user(Some(uuid)) {
+    match domain.get_user(&uuid) {
         Err(_) => HttpResponse::InternalServerError().body("Internal Server Error."),
         Ok(wrap_user) => match wrap_user {
             None => HttpResponse::NotFound().body("User not found."),
@@ -161,9 +170,12 @@ pub fn get_user(state: web::Data<Mutex<AppState>>, req: HttpRequest) -> HttpResp
     }
 }
 
-pub fn create_user(state: web::Data<Mutex<AppState>>, json: web::Json<AppUser>) -> HttpResponse {
-    let locked_state = &mut *state.lock().unwrap();
-    let domain = locked_state.get_domain();
+pub fn create_user(
+    wrap_state: Data<Arc<Mutex<AppState>>>,
+    json: web::Json<AppUser>,
+) -> HttpResponse {
+    let state = wrap_state.lock().unwrap();
+    let domain = state.get_domain();
 
     let user: AppUser = json.into_inner();
     match domain.create_user(user) {
@@ -172,9 +184,12 @@ pub fn create_user(state: web::Data<Mutex<AppState>>, json: web::Json<AppUser>) 
     }
 }
 
-pub fn update_user(state: web::Data<Mutex<AppState>>, json: web::Json<AppUser>) -> HttpResponse {
-    let locked_state = &mut *state.lock().unwrap();
-    let domain = locked_state.get_domain();
+pub fn update_user(
+    wrap_state: Data<Arc<Mutex<AppState>>>,
+    json: web::Json<AppUser>,
+) -> HttpResponse {
+    let state = wrap_state.lock().unwrap();
+    let domain = state.get_domain();
 
     let user: AppUser = json.into_inner();
     match domain.update_user(user) {
@@ -183,13 +198,16 @@ pub fn update_user(state: web::Data<Mutex<AppState>>, json: web::Json<AppUser>) 
     }
 }
 
-pub fn delete_user(state: web::Data<Mutex<AppState>>, json: web::Json<AppUser>) -> HttpResponse {
-    let locked_state = &mut *state.lock().unwrap();
-    let domain = locked_state.get_domain();
+pub fn delete_user(
+    wrap_state: Data<Arc<Mutex<AppState>>>,
+    json: web::Json<AppUser>,
+) -> HttpResponse {
+    let state = wrap_state.lock().unwrap();
+    let domain = state.get_domain();
 
     let user: AppUser = json.into_inner();
 
-    match domain.delete_user(&user) {
+    match domain.delete_user(user) {
         Err(_) => HttpResponse::InternalServerError().body("Internal Server Error."),
         Ok(_) => HttpResponse::NoContent().body("User deleted."),
     }

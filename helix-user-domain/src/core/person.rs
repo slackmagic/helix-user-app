@@ -1,7 +1,7 @@
 use chrono::prelude::*;
 use uuid;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Person {
     pub id: i32,
     pub uuid: Option<uuid::Uuid>,

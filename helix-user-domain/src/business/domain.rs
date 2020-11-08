@@ -47,42 +47,49 @@ impl UserDomainTrait for UserDomain {
             Ok(wrap_user) => match wrap_user {
                 Some(user) => Ok(user),
                 //User not found
-                None => Err(UserDomainError::NotImplemented),
+                None => {
+                    println!("User not found");
+                    Err(UserDomainError::NotImplemented)
+                }
             },
             //Error with backend
-            Err(_) => Err(UserDomainError::NotImplemented),
+            Err(_) => {
+                println!("Err with backend");
+                Err(UserDomainError::NotImplemented)
+            }
         }
     }
 
     fn get_all_users<'a>(&self) -> UserDomainResult<Vec<AppUser>> {
-        Err(UserDomainError::NotImplemented)
-    }
-    fn get_user<'a>(&self, uuid: Option<uuid::Uuid>) -> UserDomainResult<Option<AppUser>> {
-        Err(UserDomainError::NotImplemented)
-    }
-    fn create_user(&self, user: AppUser) -> UserDomainResult<AppUser> {
-        Err(UserDomainError::NotImplemented)
-    }
-    fn update_user(&self, user: AppUser) -> UserDomainResult<AppUser> {
-        Err(UserDomainError::NotImplemented)
-    }
-    fn delete_user(&self, user: &AppUser) -> UserDomainResult<()> {
-        Err(UserDomainError::NotImplemented)
+        Ok(self.storage.get_all_users()?)
     }
 
+    fn get_user<'a>(&self, uuid: &uuid::Uuid) -> UserDomainResult<Option<AppUser>> {
+        Ok(self.storage.get_user(uuid)?)
+    }
+    fn create_user(&self, user: AppUser) -> UserDomainResult<AppUser> {
+        Ok(self.storage.create_user(user)?)
+    }
+    fn update_user(&self, user: AppUser) -> UserDomainResult<AppUser> {
+        self.storage.update_person(user.person.clone())?;
+        Ok(self.storage.update_user(user)?)
+    }
+    fn delete_user(&self, user: AppUser) -> UserDomainResult<()> {
+        Ok(self.storage.delete_user(user)?)
+    }
     fn get_all_persons(&self) -> UserDomainResult<Vec<Person>> {
-        Err(UserDomainError::NotImplemented)
+        Ok(self.storage.get_all_person()?)
     }
     fn get_person(&self, uuid: &uuid::Uuid) -> UserDomainResult<Option<Person>> {
-        Err(UserDomainError::NotImplemented)
+        Ok(self.storage.get_person_by_uuid(uuid)?)
     }
     fn create_person(&self, person: Person) -> UserDomainResult<Person> {
-        Err(UserDomainError::NotImplemented)
+        Ok(self.storage.create_person(person)?)
     }
     fn update_person<'a>(&self, person: Person) -> UserDomainResult<Person> {
-        Err(UserDomainError::NotImplemented)
+        Ok(self.storage.update_person(person)?)
     }
-    fn delete_person(&self, person: &Person) -> UserDomainResult<()> {
-        Err(UserDomainError::NotImplemented)
+    fn delete_person(&self, person: Person) -> UserDomainResult<()> {
+        Ok(self.storage.delete_person(person)?)
     }
 }

@@ -112,6 +112,7 @@ fn get_exception_uri() -> Vec<String> {
     let mut exception_uri = Vec::new();
     exception_uri.push("/api/_".to_string());
     exception_uri.push("/api/version".to_string());
+    exception_uri.push("/api/login".to_string());
     exception_uri
 }
 

@@ -8,14 +8,14 @@ pub trait UserDomainTrait: Send {
     fn login(&self, login: &String, password: &String) -> UserDomainResult<AppUser>;
 
     fn get_all_users<'a>(&self) -> UserDomainResult<Vec<AppUser>>;
-    fn get_user<'a>(&self, uuid: Option<uuid::Uuid>) -> UserDomainResult<Option<AppUser>>;
+    fn get_user<'a>(&self, uuid: &uuid::Uuid) -> UserDomainResult<Option<AppUser>>;
     fn create_user(&self, user: AppUser) -> UserDomainResult<AppUser>;
     fn update_user(&self, user: AppUser) -> UserDomainResult<AppUser>;
-    fn delete_user(&self, user: &AppUser) -> UserDomainResult<()>;
+    fn delete_user(&self, user: AppUser) -> UserDomainResult<()>;
 
     fn get_all_persons(&self) -> UserDomainResult<Vec<Person>>;
     fn get_person(&self, uuid: &uuid::Uuid) -> UserDomainResult<Option<Person>>;
     fn create_person(&self, person: Person) -> UserDomainResult<Person>;
     fn update_person<'a>(&self, person: Person) -> UserDomainResult<Person>;
-    fn delete_person(&self, person: &Person) -> UserDomainResult<()>;
+    fn delete_person(&self, person: Person) -> UserDomainResult<()>;
 }

@@ -24,3 +24,4 @@ chrono = { version = "^0.4", features = ["serde"] }
 
 ##Password hashing
 rust-crypto = "^0.2"
+postgres = {version = "^0.15.2", features =["with-chrono", "with-uuid", "with-serde_json"]}

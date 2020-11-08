@@ -1,3 +1,4 @@
+use postgres::error;
 use thiserror::Error;
 
 //Define the possible errors
@@ -18,6 +19,11 @@ pub enum StorageError {
     SerdeJson {
         #[from]
         source: serde_json::Error,
+    },
+    #[error("Postgres error: {source}")]
+    PostGres {
+        #[from]
+        source: postgres::Error,
     },
 }
 
