@@ -1,4 +1,3 @@
-use postgres::error;
 use thiserror::Error;
 
 //Define the possible errors
