@@ -1,1 +1,1 @@
- docker run --volume D:\\DEV\\GIT_PROJECTS\\helix-user-app:/home/cross/project ragnaroek/rust-raspberry:1.47.0 build --release
+ docker run --volume D:\\DEV\\GIT_PROJECTS\\helix-user-app:/home/cross/project ragnaroek/rust-raspberry:1.50.0 build --release

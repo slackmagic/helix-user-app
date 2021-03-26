@@ -3,6 +3,7 @@ use crate::business::traits::UserDomainTrait;
 use crate::core::app_user::AppUser;
 use crate::core::person::Person;
 use crate::storage::traits::StorageTrait;
+use async_trait::async_trait;
 use crypto::digest::Digest;
 use crypto::sha2::Sha256;
 use std::boxed::Box;
@@ -17,6 +18,7 @@ impl UserDomain {
     }
 }
 
+#[async_trait]
 impl UserDomainTrait for UserDomain {
     fn generate_user_auth_key(&self, login: &String, password: &String) -> String {
         let salt: &str = "__H3l!X__";
@@ -39,10 +41,11 @@ impl UserDomainTrait for UserDomain {
         //return
         key
     }
-    fn login(&self, login: &String, password: &String) -> UserDomainResult<AppUser> {
+    async fn login(&self, login: &String, password: &String) -> UserDomainResult<AppUser> {
         match self
             .storage
             .login(self.generate_user_auth_key(login, password))
+            .await
         {
             Ok(wrap_user) => match wrap_user {
                 Some(user) => Ok(user),
@@ -60,36 +63,36 @@ impl UserDomainTrait for UserDomain {
         }
     }
 
-    fn get_all_users<'a>(&self) -> UserDomainResult<Vec<AppUser>> {
-        Ok(self.storage.get_all_users()?)
+    async fn get_all_users<'a>(&self) -> UserDomainResult<Vec<AppUser>> {
+        Ok(self.storage.get_all_users().await?)
     }
 
-    fn get_user<'a>(&self, uuid: &uuid::Uuid) -> UserDomainResult<Option<AppUser>> {
-        Ok(self.storage.get_user(uuid)?)
+    async fn get_user<'a>(&self, uuid: &uuid::Uuid) -> UserDomainResult<Option<AppUser>> {
+        Ok(self.storage.get_user(uuid).await?)
     }
-    fn create_user(&self, user: AppUser) -> UserDomainResult<AppUser> {
-        Ok(self.storage.create_user(user)?)
+    async fn create_user(&self, user: AppUser) -> UserDomainResult<AppUser> {
+        Ok(self.storage.create_user(user).await?)
     }
-    fn update_user(&self, user: AppUser) -> UserDomainResult<AppUser> {
-        self.storage.update_person(user.person.clone())?;
-        Ok(self.storage.update_user(user)?)
+    async fn update_user(&self, user: AppUser) -> UserDomainResult<AppUser> {
+        self.storage.update_person(user.person.clone()).await?;
+        Ok(self.storage.update_user(user).await?)
     }
-    fn delete_user(&self, user: AppUser) -> UserDomainResult<()> {
-        Ok(self.storage.delete_user(user)?)
+    async fn delete_user(&self, user: AppUser) -> UserDomainResult<()> {
+        Ok(self.storage.delete_user(user).await?)
     }
-    fn get_all_persons(&self) -> UserDomainResult<Vec<Person>> {
-        Ok(self.storage.get_all_person()?)
+    async fn get_all_persons(&self) -> UserDomainResult<Vec<Person>> {
+        Ok(self.storage.get_all_person().await?)
     }
-    fn get_person(&self, uuid: &uuid::Uuid) -> UserDomainResult<Option<Person>> {
-        Ok(self.storage.get_person_by_uuid(uuid)?)
+    async fn get_person(&self, uuid: &uuid::Uuid) -> UserDomainResult<Option<Person>> {
+        Ok(self.storage.get_person_by_uuid(uuid).await?)
     }
-    fn create_person(&self, person: Person) -> UserDomainResult<Person> {
-        Ok(self.storage.create_person(person)?)
+    async fn create_person(&self, person: Person) -> UserDomainResult<Person> {
+        Ok(self.storage.create_person(person).await?)
     }
-    fn update_person<'a>(&self, person: Person) -> UserDomainResult<Person> {
-        Ok(self.storage.update_person(person)?)
+    async fn update_person<'a>(&self, person: Person) -> UserDomainResult<Person> {
+        Ok(self.storage.update_person(person).await?)
     }
-    fn delete_person(&self, person: Person) -> UserDomainResult<()> {
-        Ok(self.storage.delete_person(person)?)
+    async fn delete_person(&self, person: Person) -> UserDomainResult<()> {
+        Ok(self.storage.delete_person(person).await?)
     }
 }

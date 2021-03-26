@@ -20,8 +20,15 @@ impl AppState {
     }
 
     fn get_pg_storage() -> Box<PgDbUserStorage> {
-        Box::new(PgDbUserStorage::new(
-            Configuration::get_database_connection_string(),
-        ))
+        Box::new(
+            PgDbUserStorage::new(
+                Configuration::get_database_name(),
+                Configuration::get_database_host(),
+                Configuration::get_database_port(),
+                Configuration::get_database_user(),
+                Configuration::get_database_password(),
+            )
+            .unwrap(),
+        )
     }
 }

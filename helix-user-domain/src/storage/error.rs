@@ -22,7 +22,7 @@ pub enum StorageError {
     #[error("Postgres error: {source}")]
     PostGres {
         #[from]
-        source: postgres::Error,
+        source: tokio_postgres::Error,
     },
 }
 

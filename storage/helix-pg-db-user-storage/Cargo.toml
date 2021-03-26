@@ -10,11 +10,13 @@ name = "helix_pg_db_user_storage"
 
 [dependencies]
 helix-user-domain = { path = "../../helix-user-domain" }
-helix-db-lib = {git = "https://github.com/slackmagic/helix-shared-lib", branch = "master"}
 
 ##DATA UTILS => UTC Date, UUID generation
-uuid = { version = "0.5", features = ["v5", "serde"]}
 chrono = { version = "^0.4", features = ["serde"] }
+uuid = { version = "0.8", features = ["v5", "serde"]}
 
 postgres = {version = "0.19", features =["with-chrono-0_4", "with-uuid-0_8", "with-serde_json-1"]}
-##postgres = {version = "^0.15.2", features =["with-chrono", "with-uuid", "with-serde_json"]}
+
+async-trait = "0.1.48"
+tokio-postgres = {version ="0.5.5", features =["with-serde_json-1", "with-uuid-0_8", "with-chrono-0_4"]}
+deadpool-postgres = "0.5.0"
