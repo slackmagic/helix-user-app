@@ -1,16 +1,33 @@
 use crate::state::AppState;
 use crate::APP_NAME;
+use actix_files::NamedFile;
 use actix_web::web::Data;
-use actix_web::{web, HttpRequest, HttpResponse};
+use actix_web::{web, HttpRequest, HttpResponse, Result};
 use helix_auth_lib::HelixAuth;
 use helix_user_domain::core::app_user::AppUser;
 use helix_user_domain::core::person::Person;
+use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 
 #[derive(Debug, Serialize, Deserialize)]
 struct HealthCheckResponse {
     app_name: String,
     message: String,
+}
+
+pub async fn serve_static_file(req: HttpRequest) -> Result<NamedFile> {
+    let filename: &str = req.match_info().query("filename");
+    let base_path = "./static/";
+
+    println!(">>> REQUESTED : {:?}", filename);
+    let filename = match filename.contains(".") {
+        true => filename,
+        false => "index.html",
+    };
+
+    let serve_file_path = format!("{}{}", base_path, filename);
+    let path: PathBuf = PathBuf::from(serve_file_path);
+    Ok(NamedFile::open(path)?)
 }
 
 pub fn healthcheck(_req: HttpRequest) -> HttpResponse {

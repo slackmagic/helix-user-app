@@ -1,3 +1,4 @@
 /target
+/static
 Cargo.lock
 env.local
