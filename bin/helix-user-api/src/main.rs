@@ -7,7 +7,6 @@ pub mod state;
 
 use crate::controller::*;
 use crate::state::AppState;
-use actix_files as fs;
 use actix_web::{middleware, web, App, HttpServer};
 use helix_auth_lib::middleware::AuthValidator;
 use helix_config_lib::version::Version;
