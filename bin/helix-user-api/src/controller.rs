@@ -1,3 +1,4 @@
+use crate::configuration::Configuration;
 use crate::state::AppState;
 use crate::APP_NAME;
 use actix_files::NamedFile;
@@ -17,9 +18,8 @@ struct HealthCheckResponse {
 
 pub async fn serve_static_file(req: HttpRequest) -> Result<NamedFile> {
     let filename: &str = req.match_info().query("filename");
-    let base_path = "./static/";
+    let base_path = Configuration::get_static_folder();
 
-    println!(">>> REQUESTED : {:?}", filename);
     let filename = match filename.contains(".") {
         true => filename,
         false => "index.html",

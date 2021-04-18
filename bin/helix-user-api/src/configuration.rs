@@ -25,4 +25,8 @@ impl Configuration {
     pub fn get_database_password() -> String {
         env::var("HELIX_DB_PASSWORD").expect("HELIX_DB_PASSWORD not found.")
     }
+
+    pub fn get_static_folder() -> String {
+        env::var("HELIX_STATIC_FOLDER").expect("HELIX_STATIC_FOLDER not found.")
+    }
 }
