@@ -5,11 +5,10 @@ pub mod configuration;
 pub mod controller;
 pub mod state;
 
-use crate::controller::*;
+use crate::controller::{business_controller::*, internal_controller::*};
 use crate::state::AppState;
 use actix_web::{middleware, web, App, HttpServer};
 use helix_auth_lib::middleware::AuthValidator;
-use helix_config_lib::version::Version;
 use helix_config_lib::Configuration as GlobalConfiguration;
 use std::sync::{Arc, Mutex};
 use std::{env, io};
@@ -45,7 +44,6 @@ async fn main() -> io::Result<()> {
             .service(
                 web::scope("/api")
                     .route("/_", web::get().to(healthcheck))
-                    .route("/version", web::get().to(version))
                     .service(web::scope("/").configure(get_routes_configuration)),
             )
             .service(web::scope("").route("/{filename:.*}", web::get().to(serve_static_file)))
@@ -102,13 +100,4 @@ fn get_exception_uri() -> Vec<String> {
     exception_uri.push("/api/version".to_string());
     exception_uri.push("/api/login".to_string());
     exception_uri
-}
-
-pub fn get_crate_version() -> Version {
-    Version::new(
-        env!("CARGO_PKG_VERSION").to_owned(),
-        env!("GIT_HASH").to_owned(),
-        env!("GIT_MESSAGE").to_owned(),
-        env!("GIT_COMMIT_DATE").to_owned(),
-    )
 }
