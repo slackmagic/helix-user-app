@@ -19,7 +19,7 @@ pub struct AccessToken {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct RefreshToken {
+pub struct RefreshToken {
     refresh_token: String,
 }
 
@@ -32,7 +32,7 @@ pub async fn login(
 
     match domain.login(&login_data.login, &login_data.password).await {
         Ok(app_user) => {
-            let generated_keys = HelixAuth::generate_keys(
+            let generated_keys = HelixAuth::generate_tokens(
                 &login_data.login,
                 &app_user.uuid.unwrap(),
                 &app_user.person.uuid.unwrap(),
@@ -52,6 +52,26 @@ pub async fn login(
         }
 
         Err(_) => HttpResponse::Unauthorized().body("{'message':'invalid credentials'}"),
+    }
+}
+
+pub async fn refresh(
+    wrap_state: Data<Arc<Mutex<AppState>>>,
+    refresh_token: web::Json<RefreshToken>,
+) -> HttpResponse {
+    let state = wrap_state.lock().unwrap();
+    let generated_keys = HelixAuth::refresh_tokens(&refresh_token.refresh_token);
+
+    match generated_keys {
+        Ok(generated_keys) => {
+            let atoken: AccessToken = AccessToken {
+                access_token: generated_keys.0,
+                refresh_token: generated_keys.1,
+            };
+
+            HttpResponse::Ok().json(atoken)
+        }
+        Err(_) => HttpResponse::InternalServerError().body("Internal Server Error."),
     }
 }
 

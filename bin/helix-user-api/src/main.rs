@@ -67,6 +67,7 @@ fn get_routes_configuration(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("")
             .route("/login", web::post().to(login))
+            .route("/login", web::put().to(refresh))
             .service(
                 web::scope("/persons")
                     .route("", web::get().to(get_all_persons))
