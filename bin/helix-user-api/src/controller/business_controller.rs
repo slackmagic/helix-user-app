@@ -55,11 +55,7 @@ pub async fn login(
     }
 }
 
-pub async fn refresh(
-    wrap_state: Data<Arc<Mutex<AppState>>>,
-    refresh_token: web::Json<RefreshToken>,
-) -> HttpResponse {
-    let state = wrap_state.lock().unwrap();
+pub async fn refresh(refresh_token: web::Json<RefreshToken>) -> HttpResponse {
     let generated_keys = HelixAuth::refresh_tokens(&refresh_token.refresh_token);
 
     match generated_keys {
