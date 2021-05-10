@@ -32,7 +32,7 @@ pub fn healthcheck(_req: HttpRequest) -> HttpResponse {
         message: "Everything's fine !".to_string(),
         version: helix_config_lib::version::Version::new(
             env!("CARGO_PKG_VERSION").to_owned(),
-            env!("POKEMON_NAME").to_owned(),
+            env!("VERSION_NAME").to_owned(),
             env!("GIT_SHORT_HASH").to_owned(),
             env!("GIT_MESSAGE").to_owned(),
             env!("GIT_COMMIT_DATE").to_owned(),
