@@ -1,31 +1,14 @@
-use helix_user::user_service_server::{UserService, UserServiceServer};
-use helix_user::{AuthRequest, AuthResponse};
-use tonic::{transport::Server, Request, Response, Status};
+use crate::controller::business_controller::ImplUserService;
+use crate::controller::user_service_server::UserServiceServer;
+use tonic::transport::Server;
 
-mod helix_user {
-    //include the wrapped generated lib
-    tonic::include_proto!("helix_user_v1");
-}
+pub mod controller;
 
-#[derive(Default)]
-pub struct ImplUserService {}
-
-#[tonic::async_trait]
-impl UserService for ImplUserService {
-    async fn authenticate(
-        &self,
-        request: tonic::Request<AuthRequest>,
-    ) -> Result<tonic::Response<AuthResponse>, tonic::Status> {
-        println!("Authenticate request : {:?}", request);
-
-        Ok(Response::new(AuthResponse {
-            token: "A_VALID_TOKEN".to_string(),
-        }))
-    }
-}
+const APP_NAME: &str = "USER_APP";
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    println!("[HELIX gRPC {} {}]", APP_NAME, env!("CARGO_PKG_VERSION"));
     let addr = "[::1]:50051".parse()?;
     let impl_user_service = ImplUserService::default();
 
