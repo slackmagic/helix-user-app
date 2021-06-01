@@ -9,8 +9,11 @@ const APP_NAME: &str = "USER_APP";
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("[HELIX gRPC {} {}]", APP_NAME, env!("CARGO_PKG_VERSION"));
-    let addr = "[::1]:50051".parse()?;
+    let addr = "127.0.0.1:42420".parse()?;
     let impl_user_service = ImplUserService::default();
+
+    print!("--> Started on ");
+    println!("http://{}", addr);
 
     Server::builder()
         .add_service(UserServiceServer::new(impl_user_service))
