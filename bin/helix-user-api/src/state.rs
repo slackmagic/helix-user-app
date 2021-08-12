@@ -1,7 +1,7 @@
 use crate::configuration::Configuration;
-use helix_pg_db_user_storage::PgDbUserStorage;
 use helix_user_domain::business::domain::UserDomain;
 use helix_user_domain::business::traits::UserDomainTrait;
+use pg_db_storage::PgDbUserStorage;
 use std::boxed::Box;
 
 pub struct AppState {

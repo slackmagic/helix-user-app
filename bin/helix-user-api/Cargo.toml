@@ -30,7 +30,7 @@ chrono = { version = "^0.4", features = ["serde"] }
 
 ##DOMAIN
 helix-user-domain = { path = "../../helix-user-domain" }
-helix-pg-db-user-storage = { path = "../../storage/helix-pg-db-user-storage" }
+pg-db-storage = { path = "../../storage/pg-db-storage" }
 helix-auth-lib = {git = "https://github.com/slackmagic/helix-shared-lib", branch = "master"}
 helix-config-lib = {git = "https://github.com/slackmagic/helix-shared-lib", branch = "master"}
 
